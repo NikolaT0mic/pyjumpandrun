@@ -3,18 +3,18 @@ from player import player
 
 
 def redrawWindow(surface):
-    global p, p_modell, obstacle
+    global p
 
     surface.fill((255, 255, 255))
     pygame.draw.line(surface, (0, 0, 0), (0, 450), (800, 450))
-    p_modell = pygame.draw.rect(
+    pygame.draw.rect(
         surface, (0, 0, 0), (p.x, p.y, p.width, p.width))
-    obstacle = pygame.draw.rect(surface, (0, 0, 0), (100, 410, 100, 20))
+    pygame.draw.rect(surface, (0, 0, 0), (100, 410, 100, 20))
     pygame.display.update()
 
 
 def main():
-    global p, p_modell, obstacle
+    global p
 
     width = 800
     height = 600
