@@ -3,16 +3,18 @@ from player import player
 
 
 def redrawWindow(surface):
-    global p
+    global p, p_modell, obstacle
 
     surface.fill((255, 255, 255))
     pygame.draw.line(surface, (0, 0, 0), (0, 450), (800, 450))
-    pygame.draw.rect(surface, (0, 0, 0), (p.x, p.y, p.width, p.width))
+    p_modell = pygame.draw.rect(
+        surface, (0, 0, 0), (p.x, p.y, p.width, p.width))
+    obstacle = pygame.draw.rect(surface, (0, 0, 0), (100, 410, 100, 20))
     pygame.display.update()
 
 
 def main():
-    global p
+    global p, p_modell, obstacle
 
     width = 800
     height = 600
@@ -62,6 +64,8 @@ def main():
             p.y_speed = 0
         else:
             p.y += p.y_speed
+
+        # Rect Collide
 
         p.x += p.x_speed
         redrawWindow(win)
