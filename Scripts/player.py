@@ -8,5 +8,6 @@ class player:
         self.width = 40
         self.x_speed = 0
         self.y_speed = 0
-
+        self.isJump = False
+        self.standing = True
 

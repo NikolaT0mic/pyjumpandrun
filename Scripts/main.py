@@ -1,6 +1,8 @@
 import pygame
 from player import player
 
+pygame.init()
+
 
 def redrawWindow(surface):
     global p
@@ -26,9 +28,11 @@ def main():
 
     p = player()
 
+    gravity = 5
+
     running = True
     while running:
-        clock.tick(30)
+        clock.tick(60)
         # Quit
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -42,9 +46,9 @@ def main():
                 if event.key == pygame.K_d:
                     p.x_speed = 5
 
-                if event.key == pygame.K_SPACE and p.y == 410:
-                    p.y -= 50
-                    p.y_speed = 5
+                if event.key == pygame.K_SPACE and not p.isJump:
+                    p.isJump = True
+                    p.y_speed = -10
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a and p.x_speed < 0:
@@ -53,19 +57,23 @@ def main():
                 if event.key == pygame.K_d and p.x_speed > 0:
                     p.x_speed = 0
 
+        if not p.isJump and p.standing:
+            p.y += gravity
+        elif p.isJump:
+            p.y_speed -= 5
+            p.y += p.y_speed
+            if p.y_speed <= -30:
+                p.isJump = False
+                p.y_speed = 0
+
         # Borders left/right
         if p.x <= 0:
             p.x = 0
         elif p.x >= width - p.width:
             p.x = width - p.width
-        # y-Border + JumpDrop
-        if p.y >= 450 - p.width:
+        # y-Border
+        if p.y >= 410:
             p.y = 410
-            p.y_speed = 0
-        else:
-            p.y += p.y_speed
-
-        # Rect Collide
 
         p.x += p.x_speed
         redrawWindow(win)
@@ -73,5 +81,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
 
 
