@@ -32,6 +32,9 @@ def main():
 
     running = True
     while running:
+        #test
+        print(clock.get_time())
+
         clock.tick(60)
         # Quit
         for event in pygame.event.get():
