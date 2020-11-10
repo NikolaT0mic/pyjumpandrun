@@ -9,5 +9,5 @@ class player:
         self.x_speed = 0
         self.y_speed = 0
         self.isJump = False
-        self.standing = True
+        self.ground = 410
 
