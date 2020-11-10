@@ -10,4 +10,5 @@ class player:
         self.y_speed = 0
         self.isJump = False
         self.ground = 410
+        self.center = self.x + self.width / 2 + self.width / 2
 

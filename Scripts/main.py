@@ -5,7 +5,7 @@ from obstacle import obstacle
 pygame.init()
 
 
-def redrawWindow(surface):
+def updateWindow(surface):
     global p, o, p_modell, o_modell
 
     surface.fill((255, 255, 255))
@@ -35,8 +35,6 @@ def main():
 
     running = True
     while running:
-        #test
-        print(clock.get_time())
 
         clock.tick(60)
         # Quit
@@ -63,29 +61,37 @@ def main():
                 if event.key == pygame.K_d and p.x_speed > 0:
                     p.x_speed = 0
 
-        redrawWindow(win)
-        p.x += p.x_speed
+        updateWindow(win)
+        # Update player.x dependent on deltatime
+        p.x += p.x_speed * clock.get_time() / 10
+        # Center of objects
+        p.center = p.x + p.width / 2 + p.width / 2
+        o.center = o.x + o.width / 2 + o.height / 2
 
         # Jump Logic
         if not p.isJump:
-            p.y += gravity
+            p.y += gravity * clock.get_time() / 10
         elif p.isJump:
             p.y_speed -= 5
-            p.y += p.y_speed
-            if p.y_speed <= -30:
+            p.y += p.y_speed * clock.get_time() / 10
+            if p.y_speed <= -25:
                 p.isJump = False
                 p.y_speed = 0
-        # Jump on obstacle
-        if (p.x + p.width > o.x or p.x < o.x + o.width) and (p.y + p.width) < o.y:
-            p.ground = o.y - p.width
-        elif p.ground == o.y - p.width and p.x + p.width < o.x:
-            p.ground = 410
-        elif p.ground == o.y - p.width and p.x > o.x + o.width:
-            p.ground = 410
-        elif pygame.Rect.colliderect(p_modell.inflate(1, 0), o_modell) and p.x + p.width > o.x and p.ground == 410:
-            p.x = o.x - p.width
-        elif pygame.Rect.colliderect(p_modell, o_modell.inflate(1, 0)) and p.x < o.x + o.width and p.ground == 410:
-            p.x = o.x + o.width
+        # Jump on obstacle + obstacle left/right collide
+        if p.center < o.center:
+            if (p.x + p.width > o.x) and (p.y + p.width) < o.y:
+                p.ground = o.y - p.width
+            elif p.x + p.width < o.x and p.ground != 410:
+                p.ground = 410
+            elif p.x + p.width > o.x and p.ground == 410:
+                p.x = o.x - p.width
+        if p.center > o.center:
+            if (p.x < o.x + o.width) and (p.y + p.width) < o.y:
+                p.ground = o.y - p.width
+            elif p.x > o.x + o.width and p.ground != 410:
+                p.ground = 410
+            elif p.x < o.x + o.width and p.ground == 410:
+                p.x = o.x + o.width
         # Borders left/right
         if p.x <= 0:
             p.x = 0
