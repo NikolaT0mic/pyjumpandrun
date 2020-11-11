@@ -66,7 +66,6 @@ def main():
         p.x += p.x_speed * clock.get_time() / 10
         # Center of objects
         p.center = p.x + p.width / 2 + p.width / 2
-        o.center = o.x + o.width / 2 + o.height / 2
 
         # Jump Logic
         if not p.isJump:
