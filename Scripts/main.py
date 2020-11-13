@@ -105,6 +105,8 @@ def main():
             p.y = p.ground
             p.isJump = False
             p.y_speed = 0
+        else:
+            p.isJump = True
 
 
 if __name__ == '__main__':
