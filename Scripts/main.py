@@ -31,7 +31,7 @@ def main():
     p = player()
     o = obstacle(100, 410)
 
-    gravity = 5
+    gravity = 0.5
 
     running = True
     while running:
@@ -64,18 +64,21 @@ def main():
         updateWindow(win)
         # Update player.x dependent on deltatime
         p.x += p.x_speed * clock.get_time() / 10
-        # Center of objects
+        # Center of moving objects
         p.center = p.x + p.width / 2 + p.width / 2
 
         # Jump Logic
-        if not p.isJump:
-            p.y += gravity * clock.get_time() / 10
-        elif p.isJump:
-            p.y_speed -= 5
-            p.y += p.y_speed * clock.get_time() / 10
-            if p.y_speed <= -25:
-                p.isJump = False
-                p.y_speed = 0
+        if p.isJump:
+            #p.y += gravity * clock.get_time() / 10
+            p.y_speed += gravity
+            p.y += p.y_speed + 0.5 * gravity
+        # elif p.isJump:
+        #     #p.y_speed -= 5
+        #     #p.y += p.y_speed * clock.get_time() / 10
+        #     if p.y == p.ground:
+        #         p.isJump = False
+        #         p.y_speed = 0
+
         # Jump on obstacle + obstacle left/right collide
         if p.center < o.center:
             if (p.x + p.width > o.x) and (p.y + p.width) < o.y:
@@ -91,6 +94,7 @@ def main():
                 p.ground = 410
             elif p.x < o.x + o.width and p.ground == 410:
                 p.x = o.x + o.width
+
         # Borders left/right
         if p.x <= 0:
             p.x = 0
@@ -99,6 +103,8 @@ def main():
         # y-Border (depends on player.ground)
         if p.y >= p.ground:
             p.y = p.ground
+            p.isJump = False
+            p.y_speed = 0
 
 
 if __name__ == '__main__':
